@@ -2,10 +2,10 @@
 
 one:
   client: one
-  slug: MyString
-  template: MyString
+  slug: loja-um
+  template: loja
 
 two:
   client: two
-  slug: MyString
-  template: MyString
+  slug: pessoal-dois
+  template: pessoal
