@@ -29,10 +29,10 @@ Ruby on Rails 8 (via mise, não rbenv) + PostgreSQL + Devise + Active Storage + 
 7. Painel admin (nested attributes) — a detalhar: CRUD de `Client`s e `LandingPage`s pra você, `form_with`, edição de sections/photos juntas, reordenação via `position`
 8. Deploy — a detalhar: hospedagem, env vars/segredos, banco em produção, storage de imagens (provável S3)
 
-Página-mãe: https://app.notion.com/p/3b20f74b846e81ebb583f69fbc9ebf5d
+Projeto no Notion (banco "Projetos", fases linkadas como tasks no banco "Tarefas"): https://app.notion.com/p/3bc0f74b846e8000a362d658afb8ec9a
 
 ## Estado atual do diretório
-Raiz tem só `Gemfile` (`gem 'irb'`, resquício da Fase 1) — sem app Rails ainda. Fase 2 pede `rails new blog_app` num subdiretório à parte, descartável, não é o projeto final.
+App Rails já criado na raiz (`rails new . --database=postgresql`). Fases 0–4 concluídas (models + Devise); Fase 5 (rota pública `/lp/:slug`) é a próxima.
 
 ## Convenções de trabalho
 - Toda decisão registrada no Notion (tabela "Decisões já tomadas" + notas de progresso por fase).
