@@ -15,4 +15,26 @@ class SectionTest < ActiveSupport::TestCase
 
     assert section.valid?
   end
+
+  test "data accepts JSON string and converts to Hash" do
+    section = sections(:one)
+    section.data = '{"titulo": "Novo título"}'
+
+    assert_equal({ "titulo" => "Novo título" }, section.data)
+  end
+
+  test "data accepts Hash directly" do
+    section = sections(:one)
+    section.data = { "titulo" => "Direto" }
+
+    assert_equal({ "titulo" => "Direto" }, section.data)
+  end
+
+  test "malformed JSON string adds error on data" do
+    section = sections(:one)
+    section.data = "{invalido"
+
+    assert_not section.valid?
+    assert_includes section.errors[:data], "precisa ser um JSON válido (ex.: {\"titulo\": \"texto\"})"
+  end
 end
