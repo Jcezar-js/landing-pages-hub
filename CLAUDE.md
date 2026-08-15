@@ -13,10 +13,10 @@ Fonte de verdade: Notion (projeto + páginas de fase). Este arquivo é resumo pr
 | Fase 1 — Fundamentos de Ruby | https://app.notion.com/3bc0f74b846e81a19bc2ceb0f00eae7b |
 | Fase 2 — Fundamentos de Rails | https://app.notion.com/3bc0f74b846e8133a04ef5f4ae7483bb |
 | Fase 3 — Modelagem do domínio | https://app.notion.com/3bc0f74b846e81e184d3e91627eceedc |
-| Fase 4 — Autenticação do admin | https://app.notion.com/3bc0f74b846e8125b546e09dfb90f10f |
+| Fase 4 — Autenticação do admin (progresso: https://app.notion.com/p/3bd0f74b846e81c898aac95df0428ad9) | https://app.notion.com/3bc0f74b846e8125b546e09dfb90f10f |
 | Fase 5 — Roteamento e template (progresso: https://app.notion.com/p/3bd0f74b846e819bbab5f837f3cac8f7) | https://app.notion.com/3bc0f74b846e81ffa6e9f863de7e57b3 |
 | Fase 6 — Upload de imagens | https://app.notion.com/3bc0f74b846e81b5b40ad46b2cc49886 |
-| Fase 7 — Painel admin | https://app.notion.com/3bc0f74b846e810c8270c218ce5b9ed2 |
+| Fase 7 — Painel admin (progresso: https://app.notion.com/p/3bd0f74b846e812b9e7cf4720814b10f) | https://app.notion.com/3bc0f74b846e810c8270c218ce5b9ed2 |
 | Fase 8 — Deploy | https://app.notion.com/3bc0f74b846e81f5afcdcf149bd609d8 |
 
 Cada página de fase ganha, ao começar a fase, subpágina filha `📓 Progresso — Fase N` (link some dentro da própria página da fase até ser criada) — usar mesmo padrão de nome pras fases 6-8 quando começarem.
@@ -52,4 +52,5 @@ Ideia de base continua a mesma: blocos reaproveitáveis, template compartilhado 
   2. Rodar skill `/ponytail-review` no diff — resolver ou justificar cada achado antes de seguir.
   3. Documentação de progresso (skills padrão do Claude Code + progresso do projeto no Notion).
   4. Commit local.
+- **Marcar início de código nosso vs código de framework.** Todo trecho de implementação nossa (não gerado por scaffold/convenção padrão do Rails) ganha comentário curto no início marcando isso, tipo `# --- início: lógica nossa (X) ---`. Facilita auditar o código separando o que é nosso do que vem pronto do framework.
 - **Questionar abordagem antes de implementar.** Toda ideia/abordagem que o usuário propuser deve ser analisada em busca de problema grande no futuro (dívida técnica séria, risco de segurança, escalabilidade) ou problema de manutenção/suporte. Se achar problema, apresentar antes de implementar. A proposta de solução deve **adaptar** a ideia original a um formato mais realista, sem descartá-la nem reformulá-la por completo — manter a essência do que o usuário pediu.
