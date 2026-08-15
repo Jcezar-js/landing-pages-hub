@@ -1,0 +1,8 @@
+<div class="landing-page landing-page--pessoal">
+  <% @landing_page.sections.each do |section| %>
+    <article>
+      <h2><%= section.title %></h2>
+      <p><%= section.content %></p>
+    </article>
+  <% end %>
+</div>

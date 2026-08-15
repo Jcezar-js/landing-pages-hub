@@ -1,0 +1,8 @@
+<div class="landing-page landing-page--loja">
+  <% @landing_page.sections.each do |section| %>
+    <section>
+      <h2><%= section.title %></h2>
+      <p><%= section.content %></p>
+    </section>
+  <% end %>
+</div>

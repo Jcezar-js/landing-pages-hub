@@ -1,0 +1,7 @@
+<h1><%= @landing_page.client.name %></h1>
+
+<% if @landing_page.template == "loja" %>
+  <%= render "loja" %>
+<% else %>
+  <%= render "pessoal" %>
+<% end %>
