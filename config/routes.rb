@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: "dashboard#index"
+    resources :clients, only: %i[index new create edit update destroy]
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
