@@ -3,9 +3,7 @@
 one:
   client: one
   slug: loja-um
-  template: loja
 
 two:
   client: two
   slug: pessoal-dois
-  template: pessoal

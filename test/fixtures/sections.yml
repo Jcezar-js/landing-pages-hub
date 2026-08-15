@@ -2,12 +2,16 @@
 
 one:
   landing_page: one
+  component_type: hero
   title: MyString
-  content: MyText
+  data:
+    titulo: Bem-vindo
   position: 1
 
 two:
   landing_page: two
+  component_type: sobre_mim
   title: MyString
-  content: MyText
+  data:
+    bio: Uma bio qualquer
   position: 1
