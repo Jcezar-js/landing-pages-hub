@@ -43,6 +43,9 @@ gem "image_processing", "~> 1.2"
 # Flexible authentication solution for Rails [https://github.com/heartcombo/devise]
 gem "devise"
 
+# Rate limiting and throttling middleware [https://github.com/rack/rack-attack]
+gem "rack-attack"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
