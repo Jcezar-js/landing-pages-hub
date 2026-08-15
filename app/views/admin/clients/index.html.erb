@@ -1,0 +1,22 @@
+<h1>Clients</h1>
+
+<%= link_to "Novo client", new_admin_client_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Email</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @clients.each do |client| %>
+      <tr>
+        <td><%= client.name %></td>
+        <td><%= client.email %></td>
+        <td><%= link_to "Editar", edit_admin_client_path(client) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

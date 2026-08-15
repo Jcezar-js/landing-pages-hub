@@ -1,0 +1,7 @@
+<h1>Editar client</h1>
+
+<%= render "form", client: @client %>
+
+<%= button_to "Remover client", admin_client_path(@client), method: :delete %>
+
+<%= link_to "Voltar", admin_clients_path %>
