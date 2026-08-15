@@ -1,0 +1,7 @@
+<h1>Landing page — <%= @client.name %></h1>
+
+<%= render "form", client: @client, landing_page: @landing_page %>
+
+<%= button_to "Remover landing page", admin_client_landing_page_path(@client), method: :delete %>
+
+<%= link_to "Voltar", edit_admin_client_path(@client) %>

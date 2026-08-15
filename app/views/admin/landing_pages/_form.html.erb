@@ -1,0 +1,50 @@
+<%= form_with model: landing_page, url: admin_client_landing_page_path(client), scope: :landing_page do |f| %>
+  <% if landing_page.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(landing_page.errors.count, "erro") %> impediu(ram) o salvamento:</h2>
+      <ul>
+        <% landing_page.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :slug %>
+    <%= f.text_field :slug %>
+  </div>
+
+  <%= f.fields_for :sections do |sf| %>
+    <fieldset>
+      <div>
+        <%= sf.label :component_type %>
+        <%= sf.select :component_type, Section::COMPONENT_TYPES, include_blank: true %>
+      </div>
+
+      <div>
+        <%= sf.label :title %>
+        <%= sf.text_field :title %>
+      </div>
+
+      <div>
+        <%= sf.label :position %>
+        <%= sf.number_field :position %>
+      </div>
+
+      <div>
+        <%= sf.label :data %>
+        <%= sf.text_area :data, value: sf.object.data.to_json %>
+      </div>
+
+      <% if sf.object.persisted? %>
+        <div>
+          <%= sf.label :_destroy, "Remover bloco" %>
+          <%= sf.check_box :_destroy %>
+        </div>
+      <% end %>
+    </fieldset>
+  <% end %>
+
+  <%= f.submit %>
+<% end %>
