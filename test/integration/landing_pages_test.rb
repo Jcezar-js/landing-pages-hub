@@ -19,15 +19,15 @@ class LandingPagesTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "loja template renders the loja block" do
-    get "/lp/#{landing_pages(:one).slug}"
+  test "every block type renders without error" do
+    Section::COMPONENT_TYPES.each do |type|
+      client = Client.create!(name: "Smoke #{type}")
+      landing_page = client.create_landing_page!(slug: "smoke-#{type}")
+      landing_page.sections.create!(component_type: type, title: "T", data: {}, position: 1)
 
-    assert_select "div.landing-page--loja"
-  end
+      get "/lp/#{landing_page.slug}"
 
-  test "pessoal template renders the pessoal block" do
-    get "/lp/#{landing_pages(:two).slug}"
-
-    assert_select "div.landing-page--pessoal"
+      assert_response :success, "component_type #{type} falhou ao renderizar"
+    end
   end
 end

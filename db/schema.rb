@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_06_230836) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_15_132451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -37,7 +37,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_06_230836) do
     t.bigint "client_id", null: false
     t.datetime "created_at", null: false
     t.string "slug"
-    t.string "template"
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_landing_pages_on_client_id"
     t.index ["slug"], name: "index_landing_pages_on_slug", unique: true
@@ -53,8 +52,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_06_230836) do
   end
 
   create_table "sections", force: :cascade do |t|
-    t.text "content"
+    t.string "component_type"
     t.datetime "created_at", null: false
+    t.jsonb "data", default: {}, null: false
     t.bigint "landing_page_id", null: false
     t.integer "position"
     t.string "title"

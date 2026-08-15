@@ -1,0 +1,8 @@
+<section class="block block--depoimentos">
+  <h2><%= section.title %></h2>
+  <ul>
+    <% (section.data["itens"] || []).each do |depoimento| %>
+      <li><%= depoimento %></li>
+    <% end %>
+  </ul>
+</section>
