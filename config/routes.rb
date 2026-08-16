@@ -18,6 +18,13 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # --- início: rota nossa ---
+  # A raiz não tem página própria: o produto são as LPs em /lp/:slug e o painel
+  # em /admin. Redirect (em vez de controller) porque não há nada pra renderizar
+  # aqui — quem não estiver logado cai no login pelo authenticate_admin!.
+  # 302 (temporário) de propósito: o default de `redirect` é 301, que o navegador
+  # cacheia pra sempre — se a raiz virar página de venda depois, quem já tinha
+  # acessado continuaria caindo no /admin sem nem bater no servidor.
+  root to: redirect("/admin", status: 302)
+  # --- fim: rota nossa ---
 end

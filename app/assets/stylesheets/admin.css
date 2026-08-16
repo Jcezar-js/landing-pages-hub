@@ -7,6 +7,38 @@
  * Escopo é exclusivo do layout "admin"; a LP pública não carrega este CSS.
  */
 
+/*
+ * Pico estica botão de formulário pra 100% da largura (faz sentido em página de
+ * marketing, não num painel). Volta pro tamanho do conteúdo, com fonte e padding
+ * menores. Vale pros dois layouts que carregam este arquivo: admin e auth.
+ */
+button,
+input[type="submit"],
+input[type="button"],
+[role="button"] {
+  width: auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Tela de login: card estreito centrado, sem sidebar. */
+.auth-page > main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.auth-page article {
+  width: 100%;
+  max-width: 24rem;
+  margin: 0;
+}
+
+.auth-page h2 { font-size: 1.25rem; }
+.auth-page p { margin-bottom: 0.25rem; font-size: 0.875rem; }
+
 .admin-shell {
   display: grid;
   grid-template-columns: 15rem 1fr;
@@ -82,17 +114,15 @@
 .filter-bar > * { margin-bottom: 0; }
 .filter-bar input[type="search"] { min-width: 18rem; }
 
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
+/* Contador no meio empurra "anterior" pra esquerda e "próxima" pra direita,
+   mesmo quando só um dos dois links existe. */
+.pagination { display: flex; align-items: center; gap: 1rem; }
+.pagination small { margin-inline: auto; }
 
-/* Botões dentro de célula de tabela não devem esticar pra largura toda. */
+/* button_to gera um <form>; dentro de célula ele não pode quebrar a linha. */
 td form { display: inline; margin: 0; }
 td .actions { display: flex; gap: 0.5rem; align-items: center; }
-td .actions button { width: auto; margin: 0; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
+td .actions button { margin: 0; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
 
 @media (max-width: 768px) {
   .admin-shell { grid-template-columns: 1fr; }

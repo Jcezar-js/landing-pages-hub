@@ -1,0 +1,20 @@
+<h2>Entrar</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <%= f.label :email %>
+  <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
+
+  <%= f.label :password, "Senha" %>
+  <%= f.password_field :password, autocomplete: "current-password", required: true %>
+
+  <% if devise_mapping.rememberable? %>
+    <label>
+      <%= f.check_box :remember_me %>
+      Manter conectado
+    </label>
+  <% end %>
+
+  <%= f.submit "Entrar" %>
+<% end %>
+
+<%= render "devise/shared/links" %>

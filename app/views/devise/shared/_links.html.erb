@@ -1,0 +1,10 @@
+<%# Só os dois links que existem neste app. Os módulos registerable/confirmable/
+    lockable/omniauthable não estão ligados em Admin (não há cadastro público —
+    decisão da Fase 4), então os branches gerados pro Devise foram removidos. %>
+<%- if controller_name != "sessions" %>
+  <p><%= link_to "Voltar para o login", new_session_path(resource_name) %></p>
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != "passwords" %>
+  <p><%= link_to "Esqueci minha senha", new_password_path(resource_name) %></p>
+<% end %>

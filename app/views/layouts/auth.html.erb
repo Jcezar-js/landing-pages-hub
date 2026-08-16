@@ -1,0 +1,29 @@
+<%# --- início: layout nosso (telas do Devise: card centrado, sem sidebar) --- %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "Entrar — Landing Pages Hub" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%= stylesheet_link_tag "pico.min", "admin", "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="auth-page">
+    <main>
+      <article>
+        <header><strong>Landing Pages Hub</strong></header>
+
+        <% flash.each do |type, message| %>
+          <div class="flash flash--<%= type %>" role="status"><%= message %></div>
+        <% end %>
+
+        <%= yield %>
+      </article>
+    </main>
+  </body>
+</html>
+<%# --- fim: layout nosso --- %>
