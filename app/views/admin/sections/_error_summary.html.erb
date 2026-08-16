@@ -1,0 +1,12 @@
+<%# --- início: view nossa (resumo de erros do bloco) --- %>
+<% if section.errors.any? %>
+  <div class="flash flash--alert" role="alert">
+    <strong><%= pluralize(section.errors.count, "erro") %> impediu(ram) o salvamento:</strong>
+    <ul>
+      <% section.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%# --- fim: view nossa --- %>

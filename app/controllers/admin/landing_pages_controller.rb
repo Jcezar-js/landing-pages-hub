@@ -1,15 +1,15 @@
-# --- início: lógica nossa (CRUD aninhado de LandingPage + Sections no painel admin) ---
+# --- início: lógica nossa (CRUD de LandingPage no painel admin) ---
+# Só o slug: os blocos deixaram de ser editados aqui por nested attributes e
+# passaram a ter tela própria (Admin::SectionsController), porque o formulário
+# de cada bloco depende do component_type escolhido.
 class Admin::LandingPagesController < ApplicationController
   layout "admin"
-
-  BLANK_SECTION_SLOTS = 3
 
   before_action :set_client
   before_action :set_landing_page, only: %i[edit update destroy]
 
   def new
     @landing_page = @client.build_landing_page
-    build_blank_sections
   end
 
   def create
@@ -18,20 +18,17 @@ class Admin::LandingPagesController < ApplicationController
     if @landing_page.save
       redirect_to edit_admin_client_landing_page_path(@client), notice: "Landing page criada."
     else
-      build_blank_sections
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    build_blank_sections
   end
 
   def update
     if @landing_page.update(landing_page_params)
       redirect_to edit_admin_client_landing_page_path(@client), notice: "Landing page atualizada."
     else
-      build_blank_sections
       render :edit, status: :unprocessable_entity
     end
   end
@@ -51,15 +48,8 @@ class Admin::LandingPagesController < ApplicationController
     @landing_page = @client.landing_page || raise(ActiveRecord::RecordNotFound)
   end
 
-  def build_blank_sections
-    BLANK_SECTION_SLOTS.times { @landing_page.sections.build }
-  end
-
   def landing_page_params
-    params.require(:landing_page).permit(
-      :slug,
-      sections_attributes: %i[id component_type title data position _destroy]
-    )
+    params.require(:landing_page).permit(:slug)
   end
 end
 # --- fim: lógica nossa ---

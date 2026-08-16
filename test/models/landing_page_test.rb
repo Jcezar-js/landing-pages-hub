@@ -1,40 +1,30 @@
 require "test_helper"
 
 class LandingPageTest < ActiveSupport::TestCase
-  test "creates section via nested attributes" do
-    landing_page = landing_pages(:one)
+  test "slug is required" do
+    landing_page = LandingPage.new(client: clients(:three))
 
-    assert_difference("Section.count", 1) do
-      landing_page.update(
-        sections_attributes: [
-          { component_type: "servicos", title: "Serviços", data: { titulo: "Nossos serviços" }, position: 2 }
-        ]
-      )
-    end
+    assert_not landing_page.valid?
+    assert_includes landing_page.errors[:slug], "can't be blank"
   end
 
-  test "rejects blank nested section" do
-    landing_page = landing_pages(:one)
+  test "slug is unique" do
+    landing_page = LandingPage.new(client: clients(:three), slug: landing_pages(:one).slug)
 
-    assert_no_difference("Section.count") do
-      landing_page.update(
-        sections_attributes: [
-          { component_type: "", title: "", data: nil, position: nil }
-        ]
-      )
-    end
+    assert_not landing_page.valid?
+    assert_includes landing_page.errors[:slug], "has already been taken"
   end
 
-  test "removes section via _destroy" do
+  test "sections come back ordered by position" do
     landing_page = landing_pages(:one)
-    section = sections(:one)
+    landing_page.sections.create!(component_type: "mapa", data: { "endereco" => "Rua 2" }, position: 0)
 
-    assert_difference("Section.count", -1) do
-      landing_page.update(
-        sections_attributes: [
-          { id: section.id, _destroy: "1" }
-        ]
-      )
-    end
+    assert_equal [ 0, 1 ], landing_page.reload.sections.map(&:position)
+  end
+
+  test "destroying the landing page destroys its sections" do
+    landing_page = landing_pages(:one)
+
+    assert_difference("Section.count", -1) { landing_page.destroy }
   end
 end

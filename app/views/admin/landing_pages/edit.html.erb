@@ -8,6 +8,37 @@
 
 <%= render "form", client: @client, landing_page: @landing_page %>
 
+<%# --- início: view nossa (lista de blocos, cada um com tela própria) --- %>
+<h3>Blocos</h3>
+
+<% if @landing_page.sections.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Título</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @landing_page.sections.each do |section| %>
+        <tr>
+          <td><%= section.position %></td>
+          <td><%= section.component_type.humanize %></td>
+          <td><%= section.title %></td>
+          <td><%= link_to "Editar", edit_admin_client_landing_page_section_path(@client, section) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Nenhum bloco ainda. A página pública vai sair vazia até você adicionar um.</p>
+<% end %>
+
+<p><%= link_to "Adicionar bloco", new_admin_client_landing_page_section_path(@client), role: "button" %></p>
+<%# --- fim: view nossa --- %>
+
 <%= render "shared/confirm_delete",
       url: admin_client_landing_page_path(@client),
       label: "Remover landing page",

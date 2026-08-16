@@ -6,7 +6,12 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "dashboard#index"
     resources :clients, only: %i[index new create edit update destroy] do
-      resource :landing_page, only: %i[new create edit update destroy]
+      resource :landing_page, only: %i[new create edit update destroy] do
+        # Bloco tem tela própria (em vez de nested attributes no form da LP)
+        # porque o formulário depende do component_type escolhido — e porque a
+        # Fase 6 vai pendurar upload de foto por bloco aqui.
+        resources :sections, only: %i[new create edit update destroy]
+      end
     end
   end
 

@@ -45,6 +45,17 @@ Dois frontends separados, com layouts e CSS independentes:
 - **Modal/confirmação**: `<dialog>` nativo do HTML via `app/views/shared/_confirm_delete.html.erb` — sem lib de modal, sem `data-turbo-confirm`.
 - **Paginação**: `limit`/`offset` manual (`PER_PAGE = 20` em `Admin::ClientsController`), sem gem. Trocar por `pagy` só se precisar de numeração de páginas.
 
+## Blocos — schema de campos (decisão 2026-08-16)
+
+`Section.data` (jsonb) deixou de ser editado como JSON cru no painel. `app/models/section_schema.rb` declara os campos de cada `component_type` (chave, label pt-BR, tipo, obrigatório) e é a **fonte de verdade única** do domínio de blocos:
+
+- `Section::COMPONENT_TYPES` **deriva** de `SectionSchema.component_types` — não existe segunda lista pra desalinhar.
+- As partials em `app/views/sections/` leem **só** via `Section#value("chave")`, que estoura em chave fora do schema. Um teste varre as partials e falha se alguma voltar a usar `section.data[...]` direto.
+- `Section#assign_data` é a whitelist real na escrita: corta chave fora do schema, converte campo `:list` (textarea, um item por linha) em array, e faz **merge** — chave desconhecida já gravada no banco sobrevive a mudança de schema.
+- Tipos de campo: `:string`, `:text`, `:list`. A Fase 6 (Active Storage) entra como `:image`, sem mexer no resto.
+
+**CRUD de bloco tem tela própria** (`Admin::SectionsController`, aninhado sob a LP) em vez de nested attributes, porque o formulário depende do `component_type`. Fluxo de dois passos, sem JS: `GET new` escolhe o tipo → `GET new?component_type=hero` mostra os campos daquele tipo → `POST create` grava tudo de uma vez. O passo 1 não persiste nada (bloco só com tipo nasceria inválido). `component_type` não é editável depois de criado — trocar deixaria o `data` órfão.
+
 ## Convenções de trabalho
 - Metodologia TDD continua: escrever cenário de teste (RED) antes do código, ver falhar, só então implementar (GREEN), depois refactor se precisar.
 - Estrutura de diretórios segue convenção MVC padrão do Rails — sem camada de service extra por enquanto (decisão: manter simples até ter necessidade concreta).

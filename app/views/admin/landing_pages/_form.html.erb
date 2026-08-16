@@ -13,44 +13,8 @@
   <article>
     <%= f.label :slug %>
     <%= f.text_field :slug, required: true, placeholder: "padaria-da-esquina" %>
-    <small>Endereço público da página: <code>/lp/<slug></code></small>
+    <small>Endereço público da página: <code>/lp/&lt;slug&gt;</code></small>
   </article>
-
-  <h3>Blocos</h3>
-
-  <%= f.fields_for :sections do |sf| %>
-    <article>
-      <header>
-        <strong><%= sf.object.persisted? ? sf.object.component_type&.humanize : "Novo bloco" %></strong>
-      </header>
-
-      <div class="grid">
-        <label>
-          Tipo de bloco
-          <%= sf.select :component_type, Section::COMPONENT_TYPES, include_blank: "—" %>
-        </label>
-
-        <label>
-          Posição
-          <%= sf.number_field :position %>
-        </label>
-      </div>
-
-      <%= sf.label :title, "Título" %>
-      <%= sf.text_field :title %>
-
-      <%= sf.label :data, "Conteúdo (JSON)" %>
-      <%= sf.text_area :data, value: sf.object.data.to_json, rows: 4 %>
-      <small>Ex.: <code>{"titulo": "Bem-vindo", "subtitulo": "Texto"}</code></small>
-
-      <% if sf.object.persisted? %>
-        <label>
-          <%= sf.check_box :_destroy %>
-          Remover este bloco ao salvar
-        </label>
-      <% end %>
-    </article>
-  <% end %>
 
   <%= f.submit "Salvar" %>
 <% end %>

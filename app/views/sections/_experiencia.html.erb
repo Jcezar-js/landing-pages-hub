@@ -1,7 +1,7 @@
 <section class="block block--experiencia">
   <h2><%= section.title %></h2>
   <ul>
-    <% (section.data["itens"] || []).each do |item| %>
+    <% Array(section.value("itens")).each do |item| %>
       <li><%= item %></li>
     <% end %>
   </ul>

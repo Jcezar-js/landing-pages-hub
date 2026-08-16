@@ -14,102 +14,59 @@ class AdminLandingPagesTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "create with valid nested sections" do
+  test "create with a slug" do
     client = clients(:two)
     client.landing_page.destroy
 
-    assert_difference [ "LandingPage.count", "Section.count" ], 1 do
-      post admin_client_landing_page_path(client), params: {
-        landing_page: {
-          slug: "novo-slug",
-          sections_attributes: {
-            "0" => { component_type: "hero", title: "Hero", data: '{"titulo":"Bem-vindo"}', position: 1 }
-          }
-        }
-      }
+    assert_difference("LandingPage.count", 1) do
+      post admin_client_landing_page_path(client), params: { landing_page: { slug: "novo-slug" } }
     end
 
     assert_redirected_to edit_admin_client_landing_page_path(client)
   end
 
-  test "create ignores blank nested section row" do
-    client = clients(:two)
-    client.landing_page.destroy
-
-    assert_difference("LandingPage.count", 1) do
-      assert_no_difference("Section.count") do
-        post admin_client_landing_page_path(client), params: {
-          landing_page: {
-            slug: "outro-slug",
-            sections_attributes: {
-              "0" => { component_type: "", title: "", data: "", position: "" }
-            }
-          }
-        }
-      end
-    end
-  end
-
-  test "create with invalid JSON re-renders with error" do
+  test "create without a slug re-renders with error" do
     client = clients(:two)
     client.landing_page.destroy
 
     assert_no_difference("LandingPage.count") do
-      post admin_client_landing_page_path(client), params: {
-        landing_page: {
-          slug: "invalido",
-          sections_attributes: {
-            "0" => { component_type: "hero", title: "Hero", data: "{invalido", position: 1 }
-          }
-        }
-      }
+      post admin_client_landing_page_path(client), params: { landing_page: { slug: "" } }
     end
 
     assert_response :unprocessable_entity
   end
 
-  test "edit shows existing sections" do
+  test "edit lists the existing blocks with a link to edit each one" do
     client = clients(:one)
+    section = sections(:one)
 
     get edit_admin_client_landing_page_path(client)
 
     assert_response :success
+    assert_select "a[href=?]", edit_admin_client_landing_page_section_path(client, section)
+    assert_select "a[href=?]", new_admin_client_landing_page_section_path(client)
   end
 
-  test "update changes slug and edits existing section and adds new one" do
+  # --- início: teste nosso (o textarea de JSON não pode voltar) ---
+  # Era por ele que uma chave digitada errada entrava no banco sem reclamar.
+  # Bloco agora só é editado pela tela própria, com campos vindos do schema.
+  test "the landing page form no longer edits blocks as raw JSON" do
     client = clients(:one)
-    section = sections(:one)
 
-    assert_difference("Section.count", 1) do
-      patch admin_client_landing_page_path(client), params: {
-        landing_page: {
-          slug: "slug-atualizado",
-          sections_attributes: {
-            "0" => { id: section.id, title: "Título editado" },
-            "1" => { component_type: "servicos", title: "Novo bloco", data: '{"titulo":"Serviços"}', position: 2 }
-          }
-        }
-      }
-    end
+    get edit_admin_client_landing_page_path(client)
+
+    assert_select "textarea[name*=?]", "data", false
+    assert_select "select[name*=?]", "component_type", false
+  end
+  # --- fim: teste nosso ---
+
+  test "update changes the slug" do
+    client = clients(:one)
+
+    patch admin_client_landing_page_path(client), params: { landing_page: { slug: "slug-atualizado" } }
 
     assert_redirected_to edit_admin_client_landing_page_path(client)
     assert_equal "slug-atualizado", client.landing_page.reload.slug
-    assert_equal "Título editado", section.reload.title
-  end
-
-  test "update with _destroy removes section" do
-    client = clients(:one)
-    section = sections(:one)
-
-    assert_difference("Section.count", -1) do
-      patch admin_client_landing_page_path(client), params: {
-        landing_page: {
-          sections_attributes: {
-            "0" => { id: section.id, _destroy: "1" }
-          }
-        }
-      }
-    end
   end
 
   test "destroy removes landing page and cascades sections" do

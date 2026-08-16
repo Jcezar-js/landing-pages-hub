@@ -102,6 +102,14 @@ input[type="button"],
 .flash--notice { border-left-color: var(--pico-ins-color); }
 .flash--alert  { border-left-color: var(--pico-del-color); }
 
+/* Erro sob o campo do bloco. O Pico já pinta a borda via aria-invalid; isto é
+   só o texto que diz o que faltou, colado no campo em vez de só no topo. */
+.field-error {
+  display: block;
+  margin-top: -0.75rem;
+  color: var(--pico-del-color);
+}
+
 /* Barra de busca/filtro acima da tabela. */
 .filter-bar {
   display: flex;

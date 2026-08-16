@@ -1,0 +1,48 @@
+<%# --- início: view nossa (passo 1 e 2 de "adicionar bloco") --- %>
+<nav aria-label="breadcrumb">
+  <small>
+    <%= link_to "Clientes", admin_clients_path %> /
+    <%= link_to @client.name, edit_admin_client_path(@client) %> /
+    <%= link_to "Landing page", edit_admin_client_landing_page_path(@client) %> /
+    Novo bloco
+  </small>
+</nav>
+
+<% if @component_type.blank? %>
+  <%# Passo 1: só o tipo. Nada é salvo aqui — o GET recarrega esta mesma tela
+      já sabendo qual bloco montar. %>
+  <h2>Adicionar bloco</h2>
+
+  <%= form_with url: new_admin_client_landing_page_section_path(@client), method: :get do %>
+    <article>
+      <label for="component_type">Tipo de bloco</label>
+      <%= select_tag :component_type,
+            options_for_select(Section::COMPONENT_TYPES.map { |type| [ type.humanize, type ] }),
+            id: "component_type" %>
+      <small>O tipo define quais campos você preenche no passo seguinte, e não pode ser trocado depois.</small>
+    </article>
+
+    <%= submit_tag "Continuar" %>
+  <% end %>
+<% else %>
+  <%# Passo 2: campos daquele tipo. %>
+  <h2>Novo bloco — <%= @component_type.humanize %></h2>
+
+  <%= form_with model: @section, url: admin_client_landing_page_sections_path(@client), scope: :section do |f| %>
+    <%= render "error_summary", section: @section %>
+
+    <%= f.hidden_field :component_type, value: @component_type %>
+
+    <article>
+      <%= f.label :title, "Título do bloco" %>
+      <%= f.text_field :title %>
+      <small>Aparece como cabeçalho em alguns blocos. Não é o mesmo que os campos abaixo.</small>
+
+      <%= render "fields", section: @section %>
+    </article>
+
+    <%= f.submit "Adicionar bloco" %>
+    <%= link_to "Cancelar", edit_admin_client_landing_page_path(@client), class: "secondary" %>
+  <% end %>
+<% end %>
+<%# --- fim: view nossa --- %>

@@ -1,0 +1,41 @@
+<%# --- início: view nossa (edição de bloco com campos do schema) --- %>
+<nav aria-label="breadcrumb">
+  <small>
+    <%= link_to "Clientes", admin_clients_path %> /
+    <%= link_to @client.name, edit_admin_client_path(@client) %> /
+    <%= link_to "Landing page", edit_admin_client_landing_page_path(@client) %> /
+    <%= @section.component_type.humanize %>
+  </small>
+</nav>
+
+<h2>Bloco — <%= @section.component_type.humanize %></h2>
+
+<%= form_with model: @section, url: admin_client_landing_page_section_path(@client, @section), scope: :section, method: :patch do |f| %>
+  <%= render "error_summary", section: @section %>
+
+  <article>
+    <div class="grid">
+      <div>
+        <%= f.label :title, "Título do bloco" %>
+        <%= f.text_field :title %>
+      </div>
+
+      <div>
+        <%= f.label :position, "Posição" %>
+        <%= f.number_field :position %>
+      </div>
+    </div>
+
+    <%= render "fields", section: @section %>
+  </article>
+
+  <%= f.submit "Salvar bloco" %>
+  <%= link_to "Voltar", edit_admin_client_landing_page_path(@client), class: "secondary" %>
+<% end %>
+
+<%= render "shared/confirm_delete",
+      url: admin_client_landing_page_section_path(@client, @section),
+      label: "Remover bloco",
+      title: "Remover o bloco #{@section.component_type.humanize}?",
+      message: "O conteúdo preenchido nele é apagado. Os outros blocos da página continuam." %>
+<%# --- fim: view nossa --- %>

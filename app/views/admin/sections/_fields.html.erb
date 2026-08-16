@@ -1,0 +1,34 @@
+<%# --- início: view nossa (campos do bloco montados a partir do SectionSchema) --- %>
+<%#
+  Locals: section.
+
+  Substitui o textarea de JSON cru. As chaves de `data` deixam de ser digitadas
+  pelo admin — vêm do schema — então não dá mais pra errar uma e salvar um bloco
+  que renderiza vazio na LP.
+%>
+<% SectionSchema.fields_for(section.component_type).each do |field| %>
+  <% name = "section[data][#{field.key}]" %>
+  <% id = "section_data_#{field.key}" %>
+
+  <label for="<%= id %>">
+    <%= field.label %><%= " (obrigatório)" if field.required %>
+  </label>
+
+  <% case field.type %>
+  <% when :list %>
+    <%= text_area_tag name, Array(section.value(field.key)).join("\n"), id: id, rows: 5,
+          "aria-invalid": ("true" if section.errors[field.key].any?) %>
+    <small>Um por linha.</small>
+  <% when :text %>
+    <%= text_area_tag name, section.value(field.key), id: id, rows: 4,
+          "aria-invalid": ("true" if section.errors[field.key].any?) %>
+  <% else %>
+    <%= text_field_tag name, section.value(field.key), id: id,
+          "aria-invalid": ("true" if section.errors[field.key].any?) %>
+  <% end %>
+
+  <% section.errors[field.key].each do |message| %>
+    <small class="field-error"><%= message %></small>
+  <% end %>
+<% end %>
+<%# --- fim: view nossa --- %>
