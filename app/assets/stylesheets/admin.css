@@ -1,0 +1,104 @@
+/*
+ * --- início: estilo nosso (shell do painel admin) ---
+ *
+ * Pico (pico.min.css) estiliza as tags soltas — tabela, form, botão, dialog.
+ * O que Pico não tem é layout de painel: este arquivo cobre só isso
+ * (sidebar fixa, faixa de flash, barra de filtros) e nada mais.
+ * Escopo é exclusivo do layout "admin"; a LP pública não carrega este CSS.
+ */
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid var(--pico-muted-border-color);
+  background: var(--pico-card-background-color);
+}
+
+.admin-sidebar h1 {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-sidebar nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.admin-sidebar nav a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--pico-border-radius);
+  text-decoration: none;
+}
+
+.admin-sidebar nav a[aria-current="page"] {
+  background: var(--pico-primary-focus);
+  font-weight: bold;
+}
+
+.admin-sidebar footer {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  font-size: 0.8rem;
+}
+
+.admin-content {
+  padding: 2rem;
+  max-width: 60rem;
+}
+
+/* Faixa de flash: notice em verde, alert em vermelho, usando as cores do Pico. */
+.flash {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--pico-primary);
+  border-radius: var(--pico-border-radius);
+  background: var(--pico-card-sectioning-background-color);
+}
+
+.flash--notice { border-left-color: var(--pico-ins-color); }
+.flash--alert  { border-left-color: var(--pico-del-color); }
+
+/* Barra de busca/filtro acima da tabela. */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.filter-bar > * { margin-bottom: 0; }
+.filter-bar input[type="search"] { min-width: 18rem; }
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Botões dentro de célula de tabela não devem esticar pra largura toda. */
+td form { display: inline; margin: 0; }
+td .actions { display: flex; gap: 0.5rem; align-items: center; }
+td .actions button { width: auto; margin: 0; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
+
+@media (max-width: 768px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--pico-muted-border-color); }
+  .admin-sidebar footer { position: static; margin-top: 1rem; }
+  .admin-content { padding: 1rem; }
+}
+
+/* --- fim: estilo nosso --- */

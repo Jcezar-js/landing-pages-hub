@@ -1,5 +1,9 @@
-<h1>Novo client</h1>
+<nav aria-label="breadcrumb">
+  <small><%= link_to "Clientes", admin_clients_path %> / Novo</small>
+</nav>
 
-<%= render "form", client: @client %>
+<h2>Novo cliente</h2>
 
-<%= link_to "Voltar", admin_clients_path %>
+<article>
+  <%= render "form", client: @client %>
+</article>

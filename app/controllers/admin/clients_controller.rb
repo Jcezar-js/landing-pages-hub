@@ -1,9 +1,22 @@
 # --- início: lógica nossa (CRUD de Client no painel admin) ---
 class Admin::ClientsController < ApplicationController
+  layout "admin"
+
+  PER_PAGE = 20
+
   before_action :set_client, only: %i[edit update destroy]
 
+  # Busca (nome ou id), filtro por ter/não ter landing page e paginação por
+  # limit/offset. Sem gem de paginação: são 3 linhas e a listagem só precisa de
+  # "anterior/próxima". Trocar por `pagy` se um dia precisar de numeração.
   def index
-    @clients = Client.all
+    @page = [ params[:page].to_i, 1 ].max
+    scope = filtered_clients
+
+    @total = scope.count
+    @total_pages = [ (@total / PER_PAGE.to_f).ceil, 1 ].max
+    # `includes` evita 1 query por linha: a tabela mostra a landing page de cada cliente.
+    @clients = scope.includes(:landing_page).order(:name).limit(PER_PAGE).offset((@page - 1) * PER_PAGE)
   end
 
   def new
@@ -14,7 +27,7 @@ class Admin::ClientsController < ApplicationController
     @client = Client.new(client_params)
 
     if @client.save
-      redirect_to edit_admin_client_path(@client)
+      redirect_to edit_admin_client_path(@client), notice: "Cliente criado."
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,7 +38,7 @@ class Admin::ClientsController < ApplicationController
 
   def update
     if @client.update(client_params)
-      redirect_to edit_admin_client_path(@client)
+      redirect_to edit_admin_client_path(@client), notice: "Cliente atualizado."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,10 +46,28 @@ class Admin::ClientsController < ApplicationController
 
   def destroy
     @client.destroy
-    redirect_to admin_clients_path
+    redirect_to admin_clients_path, notice: "Cliente removido."
   end
 
   private
+
+  def filtered_clients
+    scope = Client.all
+
+    if (query = params[:q].presence)
+      # Colunas qualificadas: o filtro de LP abaixo adiciona um JOIN com
+      # landing_pages, e `id` sem prefixo fica ambíguo entre as duas tabelas.
+      scope = scope.where("clients.name ILIKE :like OR clients.id::text = :exact", like: "%#{query}%", exact: query)
+    end
+
+    # `where.associated`/`where.missing` são nativos do Rails 7+ — montam o
+    # LEFT JOIN sozinhos, sem precisar escrever o join na mão.
+    case params[:lp]
+    when "com" then scope.where.associated(:landing_page)
+    when "sem" then scope.where.missing(:landing_page)
+    else scope
+    end
+  end
 
   def set_client
     @client = Client.find(params[:id])

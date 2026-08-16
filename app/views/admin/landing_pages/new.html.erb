@@ -1,5 +1,7 @@
-<h1>Nova landing page — <%= @client.name %></h1>
+<nav aria-label="breadcrumb">
+  <small><%= link_to "Clientes", admin_clients_path %> / <%= link_to @client.name, edit_admin_client_path(@client) %> / Nova landing page</small>
+</nav>
+
+<h2>Nova landing page</h2>
 
 <%= render "form", client: @client, landing_page: @landing_page %>
-
-<%= link_to "Voltar", edit_admin_client_path(@client) %>

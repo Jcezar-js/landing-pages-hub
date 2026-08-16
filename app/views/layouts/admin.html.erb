@@ -1,0 +1,46 @@
+<%# --- início: layout nosso (painel admin: Pico + sidebar fixa + flash) --- %>
+<%# Separado de application.html.erb de propósito: a LP pública não carrega o CSS
+    do painel (e vice-versa), então os dois lados podem evoluir sem brigar. %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "Painel — Landing Pages Hub" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%= stylesheet_link_tag "pico.min", "admin", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <h1>Landing Pages Hub</h1>
+
+        <nav>
+          <ul>
+            <li><%= link_to "Painel", admin_root_path, "aria-current": ("page" if current_page?(admin_root_path)) %></li>
+            <li><%= link_to "Clientes", admin_clients_path, "aria-current": ("page" if controller_name == "clients" || controller_name == "landing_pages") %></li>
+          </ul>
+        </nav>
+
+        <footer>
+          <%= current_admin.email %>
+          <%= button_to "Sair", destroy_admin_session_path, method: :delete, class: "secondary outline" %>
+        </footer>
+      </aside>
+
+      <main class="admin-content">
+        <% flash.each do |type, message| %>
+          <div class="flash flash--<%= type %>" role="status"><%= message %></div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>
+<%# --- fim: layout nosso --- %>

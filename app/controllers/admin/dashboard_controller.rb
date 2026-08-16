@@ -4,6 +4,10 @@ class Admin::DashboardController < ApplicationController
   # which visitors on any browser must be able to reach.
   allow_browser versions: :modern
 
+  layout "admin"
+
   def index
+    @clients_count = Client.count
+    @landing_pages_count = LandingPage.count
   end
 end

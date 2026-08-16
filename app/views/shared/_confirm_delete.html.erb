@@ -1,0 +1,27 @@
+<%# --- início: lógica nossa (confirmação de exclusão em <dialog> nativo) --- %>
+<%#
+  Locals: url, title, message.
+  Opcionais: label ("Remover"), confirm_label ("Sim, remover").
+
+  Substitui o `data-turbo-confirm` (window.confirm feio do navegador) por um
+  modal estilizado, sem somar dependência: <dialog> é HTML nativo e o Pico já
+  estiliza o par <dialog>/<article>.
+%>
+<span data-controller="dialog">
+  <button type="button" class="secondary outline" data-action="dialog#open">
+    <%= local_assigns.fetch(:label, "Remover") %>
+  </button>
+
+  <dialog data-dialog-target="dialog">
+    <article>
+      <h3><%= title %></h3>
+      <p><%= message %></p>
+
+      <footer>
+        <button type="button" class="secondary" data-action="dialog#close">Cancelar</button>
+        <%= button_to local_assigns.fetch(:confirm_label, "Sim, remover"), url, method: :delete %>
+      </footer>
+    </article>
+  </dialog>
+</span>
+<%# --- fim: lógica nossa --- %>

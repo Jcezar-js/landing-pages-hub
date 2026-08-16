@@ -1,1 +1,15 @@
-<h1>Painel admin</h1>
+<h2>Painel</h2>
+
+<div class="grid">
+  <article>
+    <header><small>Clientes</small></header>
+    <h3><%= @clients_count %></h3>
+    <%= link_to "Ver todos", admin_clients_path %>
+  </article>
+
+  <article>
+    <header><small>Landing pages no ar</small></header>
+    <h3><%= @landing_pages_count %></h3>
+    <%= link_to "Sem landing page", admin_clients_path(lp: "sem") %>
+  </article>
+</div>

@@ -1,7 +1,7 @@
 <%= form_with model: [:admin, client] do |f| %>
   <% if client.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(client.errors.count, "erro") %> impediu(ram) o salvamento:</h2>
+    <div class="flash flash--alert" id="error_explanation">
+      <strong><%= pluralize(client.errors.count, "erro") %> impediu(ram) o salvamento:</strong>
       <ul>
         <% client.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -10,15 +10,11 @@
     </div>
   <% end %>
 
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
+  <%= f.label :name, "Nome" %>
+  <%= f.text_field :name, required: true %>
 
-  <div>
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-  </div>
+  <%= f.label :email %>
+  <%= f.email_field :email %>
 
   <%= f.submit %>
 <% end %>

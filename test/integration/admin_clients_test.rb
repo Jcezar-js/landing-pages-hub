@@ -11,6 +11,62 @@ class AdminClientsTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # --- início: lógica nossa (busca, filtro de LP e paginação na listagem) ---
+  test "index searches by name, case insensitive" do
+    get admin_clients_path(q: "padaria")
+
+    assert_match "Padaria da Esquina", @response.body
+    assert_no_match(/Studio Fotografia Lua/, @response.body)
+  end
+
+  test "index searches by id" do
+    get admin_clients_path(q: clients(:two).id.to_s)
+
+    assert_match "Studio Fotografia Lua", @response.body
+    assert_no_match(/Padaria da Esquina/, @response.body)
+  end
+
+  test "index filters clients that have a landing page" do
+    get admin_clients_path(lp: "com")
+
+    assert_match "Padaria da Esquina", @response.body
+    assert_no_match(/Barbearia Central/, @response.body)
+  end
+
+  test "index filters clients without a landing page" do
+    get admin_clients_path(lp: "sem")
+
+    assert_match "Barbearia Central", @response.body
+    assert_no_match(/Padaria da Esquina/, @response.body)
+  end
+
+  test "index paginates at 20 clients per page" do
+    Client.destroy_all
+    25.times { |i| Client.create!(name: format("Cliente %02d", i + 1)) }
+
+    get admin_clients_path
+
+    assert_match "Cliente 01", @response.body
+    assert_match "Cliente 20", @response.body
+    assert_no_match(/Cliente 21/, @response.body)
+
+    get admin_clients_path(page: 2)
+
+    assert_match "Cliente 21", @response.body
+    assert_no_match(/Cliente 01/, @response.body)
+  end
+
+  test "index keeps search and filter while paginating" do
+    Client.destroy_all
+    25.times { |i| Client.create!(name: format("Cliente %02d", i + 1)) }
+
+    get admin_clients_path(q: "Cliente", lp: "sem", page: 2)
+
+    assert_match "Cliente 21", @response.body
+    assert_no_match(/Cliente 01/, @response.body)
+  end
+  # --- fim: lógica nossa ---
+
   test "new renders form" do
     get new_admin_client_path
 

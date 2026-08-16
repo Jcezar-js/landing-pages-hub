@@ -1,7 +1,15 @@
-<h1>Landing page — <%= @client.name %></h1>
+<nav aria-label="breadcrumb">
+  <small><%= link_to "Clientes", admin_clients_path %> / <%= link_to @client.name, edit_admin_client_path(@client) %> / Landing page</small>
+</nav>
+
+<h2>Landing page — <%= @client.name %></h2>
+
+<p><%= link_to "Ver página pública ↗", landing_page_path(slug: @landing_page.slug), target: "_blank", rel: "noopener" %></p>
 
 <%= render "form", client: @client, landing_page: @landing_page %>
 
-<%= button_to "Remover landing page", admin_client_landing_page_path(@client), method: :delete %>
-
-<%= link_to "Voltar", edit_admin_client_path(@client) %>
+<%= render "shared/confirm_delete",
+      url: admin_client_landing_page_path(@client),
+      label: "Remover landing page",
+      title: "Remover a landing page de #{@client.name}?",
+      message: "A página e todos os blocos dela são apagados. O cliente continua cadastrado." %>

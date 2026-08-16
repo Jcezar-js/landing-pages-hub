@@ -1,5 +1,7 @@
 # --- início: lógica nossa (CRUD aninhado de LandingPage + Sections no painel admin) ---
 class Admin::LandingPagesController < ApplicationController
+  layout "admin"
+
   BLANK_SECTION_SLOTS = 3
 
   before_action :set_client
@@ -14,7 +16,7 @@ class Admin::LandingPagesController < ApplicationController
     @landing_page = @client.build_landing_page(landing_page_params)
 
     if @landing_page.save
-      redirect_to edit_admin_client_landing_page_path(@client)
+      redirect_to edit_admin_client_landing_page_path(@client), notice: "Landing page criada."
     else
       build_blank_sections
       render :new, status: :unprocessable_entity
@@ -27,7 +29,7 @@ class Admin::LandingPagesController < ApplicationController
 
   def update
     if @landing_page.update(landing_page_params)
-      redirect_to edit_admin_client_landing_page_path(@client)
+      redirect_to edit_admin_client_landing_page_path(@client), notice: "Landing page atualizada."
     else
       build_blank_sections
       render :edit, status: :unprocessable_entity
@@ -36,7 +38,7 @@ class Admin::LandingPagesController < ApplicationController
 
   def destroy
     @landing_page.destroy
-    redirect_to edit_admin_client_path(@client)
+    redirect_to edit_admin_client_path(@client), notice: "Landing page removida."
   end
 
   private

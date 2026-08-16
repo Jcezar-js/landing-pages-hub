@@ -1,7 +1,31 @@
-<h1>Editar client</h1>
+<nav aria-label="breadcrumb">
+  <small><%= link_to "Clientes", admin_clients_path %> / <%= @client.name %></small>
+</nav>
 
-<%= render "form", client: @client %>
+<h2>Editar cliente</h2>
 
-<%= button_to "Remover client", admin_client_path(@client), method: :delete %>
+<article>
+  <%= render "form", client: @client %>
+</article>
 
-<%= link_to "Voltar", admin_clients_path %>
+<article>
+  <header><strong>Landing page</strong></header>
+
+  <% if @client.landing_page %>
+    <p>
+      <code>/lp/<%= @client.landing_page.slug %></code> —
+      <%= pluralize(@client.landing_page.sections.size, "bloco") %>
+    </p>
+    <%= link_to "Editar landing page", edit_admin_client_landing_page_path(@client), role: "button" %>
+    <%= link_to "Ver página pública", landing_page_path(slug: @client.landing_page.slug), role: "button", class: "secondary outline", target: "_blank", rel: "noopener" %>
+  <% else %>
+    <p>Este cliente ainda não tem landing page.</p>
+    <%= link_to "Criar landing page", new_admin_client_landing_page_path(@client), role: "button" %>
+  <% end %>
+</article>
+
+<%= render "shared/confirm_delete",
+      url: admin_client_path(@client),
+      label: "Remover cliente",
+      title: "Remover #{@client.name}?",
+      message: "O cliente e a landing page dele são apagados. Não dá pra desfazer." %>

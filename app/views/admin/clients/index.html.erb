@@ -1,22 +1,78 @@
-<h1>Clients</h1>
+<%# --- início: view nossa (listagem com busca, filtro de LP e paginação) --- %>
+<header>
+  <h2>Clientes</h2>
+  <p><%= link_to "＋ Novo cliente", new_admin_client_path, role: "button" %></p>
+</header>
 
-<%= link_to "Novo client", new_admin_client_path %>
+<%= form_with url: admin_clients_path, method: :get, class: "filter-bar" do |f| %>
+  <%= f.search_field :q, value: params[:q], placeholder: "Buscar por nome ou ID", "aria-label": "Buscar cliente" %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Email</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @clients.each do |client| %>
+  <%= f.select :lp,
+        [ [ "Todos", "" ], [ "Com landing page", "com" ], [ "Sem landing page", "sem" ] ],
+        { selected: params[:lp] },
+        "aria-label": "Filtrar por landing page" %>
+
+  <%= f.submit "Filtrar" %>
+<% end %>
+
+<% if @clients.any? %>
+  <table>
+    <thead>
       <tr>
-        <td><%= client.name %></td>
-        <td><%= client.email %></td>
-        <td><%= link_to "Editar", edit_admin_client_path(client) %></td>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Landing page</th>
+        <th></th>
       </tr>
+    </thead>
+
+    <tbody>
+      <% @clients.each do |client| %>
+        <tr>
+          <td><%= client.id %></td>
+          <td><%= client.name %></td>
+          <td><%= client.email %></td>
+          <td>
+            <% if client.landing_page %>
+              <%= link_to "/lp/#{client.landing_page.slug}", landing_page_path(slug: client.landing_page.slug) %>
+            <% else %>
+              <%= link_to "criar", new_admin_client_landing_page_path(client) %>
+            <% end %>
+          </td>
+          <td>
+            <div class="actions">
+              <%= link_to "Editar", edit_admin_client_path(client) %>
+              <%= render "shared/confirm_delete",
+                    url: admin_client_path(client),
+                    title: "Remover #{client.name}?",
+                    message: "O cliente e a landing page dele são apagados. Não dá pra desfazer." %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <nav class="pagination">
+    <% if @page > 1 %>
+      <%= link_to "← Anterior", admin_clients_path(request.query_parameters.merge(page: @page - 1)) %>
+    <% else %>
+      <span></span>
     <% end %>
-  </tbody>
-</table>
+
+    <small>Página <%= @page %> de <%= @total_pages %> — <%= @total %> cliente(s)</small>
+
+    <% if @page < @total_pages %>
+      <%= link_to "Próxima →", admin_clients_path(request.query_parameters.merge(page: @page + 1)) %>
+    <% else %>
+      <span></span>
+    <% end %>
+  </nav>
+<% else %>
+  <article>
+    <p>Nenhum cliente encontrado.</p>
+    <%= link_to "Cadastrar o primeiro", new_admin_client_path, role: "button" %>
+  </article>
+<% end %>
+<%# --- fim: view nossa --- %>

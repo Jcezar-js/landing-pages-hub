@@ -1,9 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  email: MyString
+  name: Padaria da Esquina
+  email: contato@padaria.example.com
 
 two:
-  name: MyString
-  email: MyString
+  name: Studio Fotografia Lua
+  email: oi@studiolua.example.com
+
+# Sem landing_page de propósito: cobre o filtro "sem LP" na listagem do admin.
+three:
+  name: Barbearia Central
+  email: contato@barbearia.example.com

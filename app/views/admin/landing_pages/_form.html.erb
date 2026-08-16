@@ -1,7 +1,7 @@
 <%= form_with model: landing_page, url: admin_client_landing_page_path(client), scope: :landing_page do |f| %>
   <% if landing_page.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(landing_page.errors.count, "erro") %> impediu(ram) o salvamento:</h2>
+    <div class="flash flash--alert" id="error_explanation">
+      <strong><%= pluralize(landing_page.errors.count, "erro") %> impediu(ram) o salvamento:</strong>
       <ul>
         <% landing_page.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -10,41 +10,47 @@
     </div>
   <% end %>
 
-  <div>
+  <article>
     <%= f.label :slug %>
-    <%= f.text_field :slug %>
-  </div>
+    <%= f.text_field :slug, required: true, placeholder: "padaria-da-esquina" %>
+    <small>Endereço público da página: <code>/lp/<slug></code></small>
+  </article>
+
+  <h3>Blocos</h3>
 
   <%= f.fields_for :sections do |sf| %>
-    <fieldset>
-      <div>
-        <%= sf.label :component_type %>
-        <%= sf.select :component_type, Section::COMPONENT_TYPES, include_blank: true %>
+    <article>
+      <header>
+        <strong><%= sf.object.persisted? ? sf.object.component_type&.humanize : "Novo bloco" %></strong>
+      </header>
+
+      <div class="grid">
+        <label>
+          Tipo de bloco
+          <%= sf.select :component_type, Section::COMPONENT_TYPES, include_blank: "—" %>
+        </label>
+
+        <label>
+          Posição
+          <%= sf.number_field :position %>
+        </label>
       </div>
 
-      <div>
-        <%= sf.label :title %>
-        <%= sf.text_field :title %>
-      </div>
+      <%= sf.label :title, "Título" %>
+      <%= sf.text_field :title %>
 
-      <div>
-        <%= sf.label :position %>
-        <%= sf.number_field :position %>
-      </div>
-
-      <div>
-        <%= sf.label :data %>
-        <%= sf.text_area :data, value: sf.object.data.to_json %>
-      </div>
+      <%= sf.label :data, "Conteúdo (JSON)" %>
+      <%= sf.text_area :data, value: sf.object.data.to_json, rows: 4 %>
+      <small>Ex.: <code>{"titulo": "Bem-vindo", "subtitulo": "Texto"}</code></small>
 
       <% if sf.object.persisted? %>
-        <div>
-          <%= sf.label :_destroy, "Remover bloco" %>
+        <label>
           <%= sf.check_box :_destroy %>
-        </div>
+          Remover este bloco ao salvar
+        </label>
       <% end %>
-    </fieldset>
+    </article>
   <% end %>
 
-  <%= f.submit %>
+  <%= f.submit "Salvar" %>
 <% end %>

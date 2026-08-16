@@ -31,6 +31,20 @@ Ideia de base continua a mesma: blocos reaproveitáveis, template compartilhado 
 3. Fase 6 (upload de imagens, Active Storage) — depois do CRUD admin básico funcionar.
 4. Fase 8 (deploy) — inalterada, por último.
 
+## Frontend (decisão 2026-08-16)
+
+Dois frontends separados, com layouts e CSS independentes:
+
+| | Painel admin | LP pública |
+|---|---|---|
+| Layout | `app/views/layouts/admin.html.erb` | `app/views/layouts/application.html.erb` |
+| CSS | **Pico CSS** (classless, vendorizado em `app/assets/stylesheets/pico.min.css`) + `admin.css` só pro shell (sidebar/flash/filtros) | **Tailwind** quando a fase de design dos blocos começar (ainda não instalado) |
+| Motivo | ferramenta interna de 1 usuário — Pico estiliza a tag, não precisa mexer nas views | é o produto vendido; classless deixaria todo cliente com site idêntico |
+
+- **Sem framework JS.** Não existe camada de API (nada de JSON no projeto); SPA exigiria construí-la do zero pra servir 1 admin. JS entra pontual via Stimulus (já instalado), como `dialog_controller.js`.
+- **Modal/confirmação**: `<dialog>` nativo do HTML via `app/views/shared/_confirm_delete.html.erb` — sem lib de modal, sem `data-turbo-confirm`.
+- **Paginação**: `limit`/`offset` manual (`PER_PAGE = 20` em `Admin::ClientsController`), sem gem. Trocar por `pagy` só se precisar de numeração de páginas.
+
 ## Convenções de trabalho
 - Metodologia TDD continua: escrever cenário de teste (RED) antes do código, ver falhar, só então implementar (GREEN), depois refactor se precisar.
 - Estrutura de diretórios segue convenção MVC padrão do Rails — sem camada de service extra por enquanto (decisão: manter simples até ter necessidade concreta).
