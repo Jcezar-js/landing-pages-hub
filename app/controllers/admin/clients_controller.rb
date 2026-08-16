@@ -20,7 +20,9 @@ class Admin::ClientsController < ApplicationController
   end
 
   def new
-    @client = Client.new
+    # Com params, veio da tela de prospecção: o form abre preenchido. Nada é
+    # salvo aqui — o admin ainda confere e digita o email antes de submeter.
+    @client = Client.new(params[:client] ? client_params : {})
   end
 
   def create
@@ -74,7 +76,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def client_params
-    params.require(:client).permit(:name, :email)
+    params.require(:client).permit(:name, :email, :address, :phone, :website, :google_place_id)
   end
 end
 # --- fim: lógica nossa ---

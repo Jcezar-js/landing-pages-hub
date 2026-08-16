@@ -8,6 +8,11 @@ Rails.application.routes.draw do
     resources :clients, only: %i[index new create edit update destroy] do
       resource :landing_page, only: %i[new create edit update destroy]
     end
+
+    # --- início: rota nossa (prospecção via Google Places) ---
+    # Só index: prospect não é registro nosso — vira `Client` ou não existe.
+    resources :prospects, only: %i[index]
+    # --- fim: rota nossa ---
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -124,6 +124,17 @@ td form { display: inline; margin: 0; }
 td .actions { display: flex; gap: 0.5rem; align-items: center; }
 td .actions button { margin: 0; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
 
+/* Checkbox alinhado com os campos da barra de filtro (Pico empilha por padrão). */
+.inline-check { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0; white-space: nowrap; }
+.inline-check input { margin: 0; }
+
+/* Aviso de custo/quota da Places API: discreto até sobrar pouca quota. */
+.quota { margin-top: -1rem; margin-bottom: 1.5rem; color: var(--pico-muted-color); }
+.quota--alerta { color: var(--pico-del-color); }
+
+/* Coluna de site: "sem site" é o sinal que interessa, não pode passar batido. */
+td mark { font-size: 0.8rem; }
+
 @media (max-width: 768px) {
   .admin-shell { grid-template-columns: 1fr; }
   .admin-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--pico-muted-border-color); }

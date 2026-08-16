@@ -73,6 +73,25 @@ class AdminClientsTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # Vindo da tela de prospecção: o form abre preenchido, mas nada é salvo até o
+  # admin conferir e digitar o email (que o Places não fornece).
+  test "new aceita valores de pré-preenchimento sem criar registro" do
+    assert_no_difference("Client.count") do
+      get new_admin_client_path(client: {
+        name: "Barbearia Rio Grande",
+        address: "R. Rio Grande, 138",
+        phone: "(11) 94949-8118",
+        website: "https://exemplo.com.br",
+        google_place_id: "ChIJsemsite"
+      })
+    end
+
+    assert_response :success
+    assert_select "input[name=?][value=?]", "client[name]", "Barbearia Rio Grande"
+    assert_select "input[name=?][value=?]", "client[phone]", "(11) 94949-8118"
+    assert_select "input[name=?][value=?]", "client[google_place_id]", "ChIJsemsite"
+  end
+
   test "create with valid params redirects to edit" do
     assert_difference("Client.count", 1) do
       post admin_clients_path, params: { client: { name: "Padaria da Esquina", email: "contato@padaria.example.com" } }

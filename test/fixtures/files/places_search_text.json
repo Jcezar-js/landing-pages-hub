@@ -1,0 +1,41 @@
+{
+  "places": [
+    {
+      "id": "ChIJV3_YgpZZzpQRN6GXc15srh8",
+      "nationalPhoneNumber": "(11) 5539-5678",
+      "formattedAddress": "R. Áurea, 326 - Vila Mariana, São Paulo - SP, 04015-070",
+      "rating": 5,
+      "googleMapsUri": "https://maps.google.com/?cid=2282881214045462839",
+      "websiteUri": "https://goldensbarbearia.com.br/",
+      "businessStatus": "OPERATIONAL",
+      "userRatingCount": 541,
+      "displayName": {
+        "text": "Barbearia Vila Mariana - Goldens Barbearia",
+        "languageCode": "pt"
+      }
+    },
+    {
+      "id": "ChIJXVIO4IhZzpQRGqCLAYwDnFc",
+      "nationalPhoneNumber": "(11) 94949-8118",
+      "formattedAddress": "R. Rio Grande, 138 - Vila Mariana, São Paulo - SP, 04015-001",
+      "rating": 4.7,
+      "googleMapsUri": "https://maps.google.com/?cid=6312924677522825242",
+      "businessStatus": "OPERATIONAL",
+      "userRatingCount": 201,
+      "displayName": {
+        "text": "Barbearia Rio Grande",
+        "languageCode": "pt"
+      }
+    },
+    {
+      "id": "ChIJbVKKVAtbzpQRluUKIWWR0hc",
+      "formattedAddress": "R. Santa Cruz, 525 - Vila Mariana, São Paulo - SP, 04121-000",
+      "googleMapsUri": "https://maps.google.com/?cid=1716594271513666966",
+      "businessStatus": "OPERATIONAL",
+      "displayName": {
+        "text": "Drip & Cut Barber Co. - Barbearia por Assinatura",
+        "languageCode": "pt"
+      }
+    }
+  ]
+}

@@ -24,6 +24,7 @@
           <ul>
             <li><%= link_to "Painel", admin_root_path, "aria-current": ("page" if current_page?(admin_root_path)) %></li>
             <li><%= link_to "Clientes", admin_clients_path, "aria-current": ("page" if controller_name == "clients" || controller_name == "landing_pages") %></li>
+            <li><%= link_to "Prospecção", admin_prospects_path, "aria-current": ("page" if controller_name == "prospects") %></li>
           </ul>
         </nav>
 

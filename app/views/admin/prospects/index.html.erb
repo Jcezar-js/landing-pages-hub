@@ -1,0 +1,85 @@
+<%# --- início: view nossa (busca de prospects na Google Places API) --- %>
+<header>
+  <h2>Prospecção</h2>
+  <p>Encontre negócios da região e transforme em cliente. Quem ainda não tem site é o melhor candidato a uma landing page.</p>
+</header>
+
+<%= form_with url: admin_prospects_path, method: :get, class: "filter-bar" do |f| %>
+  <%= f.search_field :q, value: @query, placeholder: "Ex: barbearia em Vila Mariana, São Paulo",
+        "aria-label": "Buscar negócios", disabled: @remaining.zero? %>
+
+  <label class="inline-check">
+    <%= f.check_box :sem_site, checked: @sem_site %>
+    Só quem não tem site
+  </label>
+
+  <%= f.submit "Buscar", disabled: @remaining.zero? %>
+<% end %>
+
+<p class="quota <%= "quota--alerta" if @remaining <= PlaceSearch::MONTHLY_LIMIT * 0.2 %>">
+  <small>
+    <% if @remaining.zero? %>
+      Limite mensal atingido — <%= @used %> de <%= PlaceSearch::MONTHLY_LIMIT %> buscas usadas.
+      A busca volta a funcionar no dia 1º.
+    <% else %>
+      Cada busca nova consome 1 requisição paga da Google. Repetir a mesma busca em até 12h não gera cobrança.
+      <strong><%= @used %> de <%= PlaceSearch::MONTHLY_LIMIT %></strong> buscas usadas neste mês.
+    <% end %>
+  </small>
+</p>
+
+<% if @results.present? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Negócio</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Site</th>
+        <th>Nota</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @results.each do |result| %>
+        <tr>
+          <td>
+            <%= result[:name] %>
+            <%# Negócio fechado permanentemente é lead perdido — precisa saltar aos olhos. %>
+            <% unless result[:status] == "OPERATIONAL" %>
+              <mark>fechado</mark>
+            <% end %>
+            <%= link_to "Ver no Maps", result[:maps_url], target: "_blank", rel: "noopener" %>
+          </td>
+          <td><%= result[:address] %></td>
+          <td><%= result[:phone] || "—" %></td>
+          <td>
+            <% if result[:website] %>
+              <%= link_to "site", result[:website], target: "_blank", rel: "noopener" %>
+            <% else %>
+              <mark>sem site</mark>
+            <% end %>
+          </td>
+          <td><%= result[:rating] ? "#{result[:rating]} (#{result[:rating_count]})" : "—" %></td>
+          <td>
+            <% if (client_id = @registered[result[:place_id]]) %>
+              <%= link_to "Já cadastrado", edit_admin_client_path(client_id) %>
+            <% else %>
+              <%= link_to "Cadastrar como cliente",
+                    new_admin_client_path(client: { name: result[:name], address: result[:address],
+                                                    phone: result[:phone], website: result[:website],
+                                                    google_place_id: result[:place_id] }),
+                    role: "button" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% elsif @query.present? && @remaining.positive? && flash.now[:alert].blank? %>
+  <article>
+    <p>Nenhum negócio encontrado para “<%= @query %>”.</p>
+  </article>
+<% end %>
+<%# --- fim: view nossa --- %>

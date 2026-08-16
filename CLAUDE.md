@@ -45,6 +45,15 @@ Dois frontends separados, com layouts e CSS independentes:
 - **Modal/confirmação**: `<dialog>` nativo do HTML via `app/views/shared/_confirm_delete.html.erb` — sem lib de modal, sem `data-turbo-confirm`.
 - **Paginação**: `limit`/`offset` manual (`PER_PAGE = 20` em `Admin::ClientsController`), sem gem. Trocar por `pagy` só se precisar de numeração de páginas.
 
+## Prospecção via Google Places (decisão 2026-08-16)
+
+`/admin/prospects` busca negócios pela Places API (New) `places:searchText` e transforma resultado em `Client` com um clique (link com query params pro form de cadastro — sem endpoint de autocomplete separado).
+
+- **Nada do Places é persistido.** Termos do Google proíbem guardar conteúdo de Places além de 30 dias; só `place_id` é livre. Resultado vive em `Rails.cache` por 12h; o que vira registro é o `Client` que o admin conferiu.
+- **Custo é requisito, não detalhe.** `websiteUri` força o SKU Enterprise (1.000 grátis/mês, depois US$ 35/1.000). Freio em três camadas: cache de 12h (senão F5 e botão voltar viram requisição paga), teto de `PlaceSearch::MONTHLY_LIMIT` (500) e contador visível. `place_search_logs` é tabela porque cache esvaziado zeraria o freio em silêncio.
+- **Key em `.env` via `dotenv-rails`** (`GOOGLE_MAPS_API_KEY`) — `Rails.application.credentials` está inutilizável (sem `config/master.key`).
+- **Testes nunca chamam a API.** Helper `stubbing` em `test_helper.rb` (Minitest 6 tirou o `stub` do core); parsing testado sobre payload real em `test/fixtures/files/places_search_text.json`.
+
 ## Convenções de trabalho
 - Metodologia TDD continua: escrever cenário de teste (RED) antes do código, ver falhar, só então implementar (GREEN), depois refactor se precisar.
 - Estrutura de diretórios segue convenção MVC padrão do Rails — sem camada de service extra por enquanto (decisão: manter simples até ter necessidade concreta).
