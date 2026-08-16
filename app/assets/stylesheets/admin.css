@@ -66,10 +66,18 @@ input[type="button"],
 }
 
 .admin-sidebar nav a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   padding: 0.5rem 0.75rem;
   border-radius: var(--pico-border-radius);
   text-decoration: none;
+  transition: background 0.15s, padding-left 0.15s;
+}
+
+.admin-sidebar nav a:hover {
+  background: var(--pico-card-sectioning-background-color);
+  padding-left: 1rem;
 }
 
 .admin-sidebar nav a[aria-current="page"] {
@@ -84,6 +92,8 @@ input[type="button"],
   right: 1rem;
   font-size: 0.8rem;
 }
+
+.admin-sidebar footer button { display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
 
 .admin-content {
   padding: 2rem;
@@ -131,6 +141,85 @@ input[type="button"],
 td form { display: inline; margin: 0; }
 td .actions { display: flex; gap: 0.5rem; align-items: center; }
 td .actions button { margin: 0; padding: 0.25rem 0.75rem; font-size: 0.8rem; }
+
+/* Checkbox alinhado com os campos da barra de filtro (Pico empilha por padrão). */
+.inline-check { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0; white-space: nowrap; }
+.inline-check input { margin: 0; }
+
+/* Aviso de custo/quota da Places API: discreto até sobrar pouca quota. */
+.quota { margin-top: -1rem; margin-bottom: 1.5rem; color: var(--pico-muted-color); }
+.quota--alerta { color: var(--pico-del-color); }
+.quota progress { max-width: 20rem; margin-bottom: 0.25rem; height: 0.4rem; }
+.quota--alerta progress { accent-color: var(--pico-del-color); }
+
+/* Coluna de site: "sem site" é o sinal que interessa, não pode passar batido. */
+td mark { font-size: 0.8rem; }
+
+/*
+ * Ícones inline (helper `icon`): acompanham o tamanho e a cor do texto ao redor
+ * (`1em` + `currentColor`), então servem em botão, link de tabela e sidebar sem
+ * regra por lugar.
+ */
+.icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+/* Cards de número do painel. */
+.stat {
+  margin: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 25%);
+}
+
+.stat header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--pico-muted-color);
+}
+
+.stat h3 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  /* `tabular-nums` trava a largura dos dígitos: sem isso o número treme
+     enquanto o contador sobe de 0 até o valor final. */
+  font-variant-numeric: tabular-nums;
+}
+
+.stat progress { margin-bottom: 0.5rem; }
+.stat--pendencia { border-left: 4px solid var(--pico-del-color); }
+
+/* Conteúdo entra deslizando (o flash é filho direto, entra junto). */
+.admin-content > * { animation: sobe 0.25s ease-out; }
+
+@keyframes sobe {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+/*
+ * Animação no painel é enfeite, nunca informação: quem pediu menos movimento no
+ * sistema operacional recebe a mesma tela, parada.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
 
 @media (max-width: 768px) {
   .admin-shell { grid-template-columns: 1fr; }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_15_132451) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_16_153534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,10 +27,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_132451) do
   end
 
   create_table "clients", force: :cascade do |t|
+    t.string "address"
     t.datetime "created_at", null: false
     t.string "email"
+    t.string "google_place_id"
     t.string "name"
+    t.string "phone"
     t.datetime "updated_at", null: false
+    t.string "website"
+    t.index ["google_place_id"], name: "index_clients_on_google_place_id", unique: true
   end
 
   create_table "landing_pages", force: :cascade do |t|
@@ -49,6 +54,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_132451) do
     t.bigint "section_id", null: false
     t.datetime "updated_at", null: false
     t.index ["section_id"], name: "index_photos_on_section_id"
+  end
+
+  create_table "place_search_logs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "query"
+    t.integer "results_count"
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_place_search_logs_on_created_at"
   end
 
   create_table "sections", force: :cascade do |t|

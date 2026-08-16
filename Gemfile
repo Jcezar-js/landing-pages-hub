@@ -47,6 +47,10 @@ gem "devise"
 gem "rack-attack"
 
 group :development, :test do
+  # Carrega o .env local em ENV (key da Google Places API). Só aqui: em produção
+  # o Kamal já injeta as variáveis de ambiente no container.
+  gem "dotenv-rails"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 

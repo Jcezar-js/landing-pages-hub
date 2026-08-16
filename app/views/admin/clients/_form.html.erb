@@ -16,5 +16,19 @@
   <%= f.label :email %>
   <%= f.email_field :email %>
 
+  <%# --- início: campos nossos (vêm preenchidos quando o cadastro sai da prospecção) --- %>
+  <%= f.label :phone, "Telefone" %>
+  <%= f.telephone_field :phone %>
+
+  <%= f.label :address, "Endereço" %>
+  <%= f.text_field :address %>
+
+  <%= f.label :website, "Site" %>
+  <%= f.url_field :website %>
+
+  <%# Sem campo visível: é identidade do negócio no Google, não dado editável. %>
+  <%= f.hidden_field :google_place_id %>
+  <%# --- fim: campos nossos --- %>
+
   <%= f.submit %>
 <% end %>

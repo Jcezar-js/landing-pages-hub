@@ -228,7 +228,11 @@ Run: Expected: PASS (8 runs).
 
 ---
 
-### Task 4 (pós-CRUD básico, opcional): Autocomplete de Client via Google Places API (New)
+### Task 4 — movida para tarefa própria (2026-08-15)
+
+O autocomplete de `Client` via Google Places API saiu do escopo desta fase e virou tarefa separada no banco "Tarefas" do Notion: [Autocomplete de Client via Google Places API (New)](https://app.notion.com/p/3bd0f74b846e81eaa197c2c5e1981e5e). A Fase 7 fechou com o CRUD manual (Task 1–3, commit `fd3e514`); nada do Places foi implementado.
+
+O conteúdo abaixo fica como registro histórico do desenho — a versão viva dos passos está na tarefa do Notion.
 
 **Decisão 2026-08-15, revisada:** ideia original era substituir o cadastro de `Client` por busca+botão via Google Places. Análise levantou 2 problemas: (1) Places não devolve email, campo obrigatório aqui — não elimina digitação manual; (2) acoplar o cadastro a uma API externa paga só pra 2 campos é dependência desproporcional ao ganho. Adaptação: mantém o form manual (Task 1) como caminho principal; Places entra só como **autocomplete opcional** que pré-preenche campos, não como substituto do form. Entra depois do CRUD básico (Task 1–3) estar funcionando, não bloqueia esta fase.
 

@@ -5,6 +5,7 @@ class Admin::ClientsController < ApplicationController
   PER_PAGE = 20
 
   before_action :set_client, only: %i[edit update destroy]
+  before_action :remember_filters, only: :index
 
   # Busca (nome ou id), filtro por ter/não ter landing page e paginação por
   # limit/offset. Sem gem de paginação: são 3 linhas e a listagem só precisa de
@@ -20,7 +21,9 @@ class Admin::ClientsController < ApplicationController
   end
 
   def new
-    @client = Client.new
+    # Com params, veio da tela de prospecção: o form abre preenchido. Nada é
+    # salvo aqui — o admin ainda confere e digita o email antes de submeter.
+    @client = Client.new(params[:client] ? client_params : {})
   end
 
   def create
@@ -74,7 +77,7 @@ class Admin::ClientsController < ApplicationController
   end
 
   def client_params
-    params.require(:client).permit(:name, :email)
+    params.require(:client).permit(:name, :email, :address, :phone, :website, :google_place_id)
   end
 end
 # --- fim: lógica nossa ---

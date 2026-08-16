@@ -1,7 +1,7 @@
 <%# --- início: view nossa (listagem com busca, filtro de LP e paginação) --- %>
 <header>
   <h2>Clientes</h2>
-  <p><%= link_to "＋ Novo cliente", new_admin_client_path, role: "button" %></p>
+  <p><%= link_to new_admin_client_path, role: "button" do %><%= icon(:novo) %> Novo cliente<% end %></p>
 </header>
 
 <%= form_with url: admin_clients_path, method: :get, class: "filter-bar" do |f| %>
@@ -42,7 +42,7 @@
           </td>
           <td>
             <div class="actions">
-              <%= link_to "Editar", edit_admin_client_path(client) %>
+              <%= link_to edit_admin_client_path(client) do %><%= icon(:editar) %> Editar<% end %>
               <%= render "shared/confirm_delete",
                     url: admin_client_path(client),
                     title: "Remover #{client.name}?",
