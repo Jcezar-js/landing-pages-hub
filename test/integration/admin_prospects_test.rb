@@ -103,9 +103,51 @@ class AdminProspectsTest < ActionDispatch::IntegrationTest
     assert_select "body", text: /1 de #{PlaceSearch::MONTHLY_LIMIT}/
   end
 
+  # O log da busca nasce dentro de `cached_search`. Ler o contador antes dessa
+  # chamada mostra sempre um número atrasado em uma busca — o admin só descobria
+  # o consumo real no próximo carregamento da página.
+  test "contador já inclui a busca recém-feita" do
+    logged_search do
+      get admin_prospects_path(q: "barbearia em Vila Mariana")
+    end
+
+    assert_select "body", text: /1 de #{PlaceSearch::MONTHLY_LIMIT}/
+  end
+
+  test "cache hit não mexe no contador" do
+    PlaceSearchLog.create!(query: "padaria em Osasco", results_count: 3)
+
+    search do
+      get admin_prospects_path(q: "padaria em Osasco")
+    end
+
+    assert_select "body", text: /1 de #{PlaceSearch::MONTHLY_LIMIT}/
+  end
+
+  # Trocar de aba e voltar não pode zerar a busca: o link da sidebar carrega de
+  # volta o último filtro usado.
+  test "aba de prospecção lembra da última busca" do
+    search do
+      get admin_prospects_path(q: "barbearia em Vila Mariana", sem_site: "1")
+    end
+
+    get admin_root_path
+
+    assert_select "a[href=?]", admin_prospects_path(q: "barbearia em Vila Mariana", sem_site: "1")
+  end
+
   private
 
   def search(&block)
     stubbing(PlaceSearch, :cached_search, ->(_query) { RESULTS }, &block)
+  end
+
+  # Igual ao `search`, mas grava o log como a chamada real grava — é o que
+  # diferencia busca nova (cobrada, conta) de cache hit (de graça, não conta).
+  def logged_search(&block)
+    stubbing(PlaceSearch, :cached_search, lambda { |query|
+      PlaceSearchLog.create!(query: query, results_count: RESULTS.size)
+      RESULTS
+    }, &block)
   end
 end

@@ -9,7 +9,7 @@
 %>
 <span data-controller="dialog">
   <button type="button" class="secondary outline" data-action="dialog#open">
-    <%= local_assigns.fetch(:label, "Remover") %>
+    <%= icon(:remover) %> <%= local_assigns.fetch(:label, "Remover") %>
   </button>
 
   <dialog data-dialog-target="dialog">

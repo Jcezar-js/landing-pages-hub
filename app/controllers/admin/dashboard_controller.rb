@@ -9,5 +9,10 @@ class Admin::DashboardController < ApplicationController
   def index
     @clients_count = Client.count
     @landing_pages_count = LandingPage.count
+    # --- início: lógica nossa (pendência real do painel) ---
+    # O que falta fazer sai da tabela que já existe: cliente cadastrado e ainda
+    # sem landing page é o próximo trabalho. Sem contador novo no banco.
+    @pending_count = Client.where.missing(:landing_page).count
+    # --- fim: lógica nossa ---
   end
 end

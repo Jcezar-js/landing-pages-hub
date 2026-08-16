@@ -11,6 +11,10 @@
 
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
 
+    <%# Transição entre páginas do painel: nativa do navegador, ligada pelo Turbo
+        com esta meta tag. Sem lib de animação. %>
+    <meta name="view-transition" content="same-origin">
+
     <%= stylesheet_link_tag "pico.min", "admin", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
@@ -22,15 +26,25 @@
 
         <nav>
           <ul>
-            <li><%= link_to "Painel", admin_root_path, "aria-current": ("page" if current_page?(admin_root_path)) %></li>
-            <li><%= link_to "Clientes", admin_clients_path, "aria-current": ("page" if controller_name == "clients" || controller_name == "landing_pages") %></li>
-            <li><%= link_to "Prospecção", admin_prospects_path, "aria-current": ("page" if controller_name == "prospects") %></li>
+            <%# Os links de listagem carregam o último filtro usado (session):
+                trocar de aba e voltar não obriga a refazer a busca. %>
+            <li><%= link_to admin_root_path, "aria-current": ("page" if current_page?(admin_root_path)) do %>
+              <%= icon(:painel) %> Painel
+            <% end %></li>
+            <li><%= link_to admin_clients_path(remembered_filters(:clients)), "aria-current": ("page" if controller_name == "clients" || controller_name == "landing_pages") do %>
+              <%= icon(:clientes) %> Clientes
+            <% end %></li>
+            <li><%= link_to admin_prospects_path(remembered_filters(:prospects)), "aria-current": ("page" if controller_name == "prospects") do %>
+              <%= icon(:busca) %> Prospecção
+            <% end %></li>
           </ul>
         </nav>
 
         <footer>
           <%= current_admin.email %>
-          <%= button_to "Sair", destroy_admin_session_path, method: :delete, class: "secondary outline" %>
+          <%= button_to destroy_admin_session_path, method: :delete, class: "secondary outline" do %>
+            <%= icon(:sair) %> Sair
+          <% end %>
         </footer>
       </aside>
 

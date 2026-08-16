@@ -65,6 +65,22 @@ class AdminClientsTest < ActionDispatch::IntegrationTest
     assert_match "Cliente 21", @response.body
     assert_no_match(/Cliente 01/, @response.body)
   end
+
+  test "aba de clientes lembra do último filtro" do
+    get admin_clients_path(q: "padaria", lp: "com")
+    get admin_root_path
+
+    assert_select "a[href=?]", admin_clients_path(q: "padaria", lp: "com")
+  end
+
+  # Só os filtros conhecidos entram na session: query string é entrada de fora,
+  # e uma URL forjada com params grandes estouraria o cookie de sessão.
+  test "filtro lembrado ignora parâmetro desconhecido" do
+    get admin_clients_path(q: "padaria", lixo: "x" * 100)
+    get admin_root_path
+
+    assert_select "a[href=?]", admin_clients_path(q: "padaria")
+  end
   # --- fim: lógica nossa ---
 
   test "new renders form" do

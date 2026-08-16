@@ -5,6 +5,7 @@ class Admin::ClientsController < ApplicationController
   PER_PAGE = 20
 
   before_action :set_client, only: %i[edit update destroy]
+  before_action :remember_filters, only: :index
 
   # Busca (nome ou id), filtro por ter/não ter landing page e paginação por
   # limit/offset. Sem gem de paginação: são 3 linhas e a listagem só precisa de

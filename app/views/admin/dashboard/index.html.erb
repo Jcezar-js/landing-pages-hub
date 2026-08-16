@@ -1,15 +1,33 @@
+<%# --- início: view nossa (painel com números e pendência) --- %>
 <h2>Painel</h2>
 
 <div class="grid">
-  <article>
-    <header><small>Clientes</small></header>
-    <h3><%= @clients_count %></h3>
-    <%= link_to "Ver todos", admin_clients_path %>
+  <article class="stat">
+    <header><%= icon(:clientes) %> Clientes</header>
+    <%# O número final já está renderizado: o Stimulus só anima a subida até ele. %>
+    <h3 data-controller="counter"><%= @clients_count %></h3>
+    <%= link_to admin_clients_path do %>Ver todos <span aria-hidden="true">→</span><% end %>
   </article>
 
-  <article>
-    <header><small>Landing pages no ar</small></header>
-    <h3><%= @landing_pages_count %></h3>
-    <%= link_to "Sem landing page", admin_clients_path(lp: "sem") %>
+  <article class="stat">
+    <header><%= icon(:lp) %> Landing pages no ar</header>
+    <h3 data-controller="counter"><%= @landing_pages_count %></h3>
+
+    <%# Progresso real: quantos clientes já têm página. `max` nunca é 0 — <progress>
+        com max zerado fica indeterminado e a barra vira animação sem sentido. %>
+    <progress value="<%= @landing_pages_count %>" max="<%= [ @clients_count, 1 ].max %>"></progress>
+
+    <small><%= @landing_pages_count %> de <%= @clients_count %> cliente(s) com página</small>
   </article>
 </div>
+
+<% if @pending_count.positive? %>
+  <article class="stat stat--pendencia">
+    <header><%= icon(:pendencia) %> Falta fazer</header>
+    <h3><%= @pending_count %></h3>
+    <%= link_to admin_clients_path(lp: "sem") do %>
+      cliente(s) ainda sem landing page <span aria-hidden="true">→</span>
+    <% end %>
+  </article>
+<% end %>
+<%# --- fim: view nossa --- %>
